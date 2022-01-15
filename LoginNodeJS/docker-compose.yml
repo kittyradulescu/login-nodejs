@@ -1,19 +1,20 @@
 version: '3.8'
 services: 
-    web:
-        build:
-            context: .
-        env_file: ./.env
-        command: npm start
-        volumes: 
-            - .:/app/
-            - /app/node_modules
-        ports:
-            - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-        depends_on: 
-            - mysqldb
-        environment: 
-            MYSQL_HOST: mysqldb
+    # web:
+    #     build:
+    #         context: .
+    #     env_file: ./.env
+    #     command: npm start
+    #     volumes: 
+    #         - .:/app/
+    #         - /app/node_modules
+    #     ports:
+    #         - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    #     depends_on: 
+    #         - mysqldb    
+    #     environment: 
+    #         MYSQL_HOST: mysqldb
+    #         WAIT_HOSTS: mysql:3306
     mysqldb:
         image: mysql
         restart: always

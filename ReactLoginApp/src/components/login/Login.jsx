@@ -5,11 +5,13 @@ import {
   LoginContainer,
   LabelContainer,
   LoginSuccess,
+  LoginFailed,
   ErrorContainer,
+  Submit,
+  SubmitContainer,
 } from './Login.styled';
 import FingerprintJS from '@fingerprintjs/fingerprintjs-pro';
 import { saveUser } from '../../api/saveUser';
-import { fetchUserHistory } from '../../api/fetchUserHistory';
 
 // Initialize an agent at application startup.
 const fpPromise = FingerprintJS.load({
@@ -40,9 +42,9 @@ const Login = () => {
       //console.log('vistor history', await fetchUserHistory(visitorId));
 
       if (saveUserResponse.users.length > 0) {
-        setShowInfo('Login is successful');
+        setShowInfo('success');
       } else {
-        setShowInfo('Login failed');
+        setShowInfo('failed');
       }
       if (saveUserResponse.loginDisabled) {
         setLoginDisabled(true);
@@ -72,16 +74,20 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </FieldContainer>
-      <button onClick={login}>Submit</button>
-      {loginDisabled ? (
+      <SubmitContainer>
+        <Submit onClick={login}>Submit</Submit>
+      </SubmitContainer>
+      {loginDisabled && (
         <ErrorContainer>
           We detected multiple log in attempts for this user, but we didn't
           perform the login action
         </ErrorContainer>
-      ) : showInfo ? (
-        <LoginSuccess> {showInfo}</LoginSuccess>
-      ) : (
-        <div></div>
+      )}
+      {!loginDisabled && showInfo && showInfo === 'success' && (
+        <LoginSuccess> Login successfull</LoginSuccess>
+      )}
+      {!loginDisabled && showInfo && showInfo === 'failed' && (
+        <LoginFailed> Login failed</LoginFailed>
       )}
     </LoginContainer>
   );

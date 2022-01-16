@@ -2,7 +2,7 @@ const db = require('../db');
 
 //Create a table for users in the database if it doesn't exist at application start
 !(async function createTable() {
-  const blockerUserQuery = `CREATE TABLE IF NOT EXISTS blockedUser (
+  const blockerUserQuery = `CREATE TABLE IF NOT EXISTS blocked_user (
         id INT PRIMARY KEY AUTO_INCREMENT,
         username VARCHAR(255) NOT NULL,
         noOfTries INT NOT NULL,
@@ -12,7 +12,7 @@ const db = require('../db');
 
 exports.findOne = async function (username) {
   const result = await db.query(
-    'SELECT * FROM blockedUser WHERE username=?',
+    'SELECT * FROM blocked_user WHERE username=?',
     username
   );
   return result[0];
@@ -20,11 +20,11 @@ exports.findOne = async function (username) {
 
 exports.create = async function (username, nrTries, timestamp) {
   await db.query(
-    'INSERT INTO blockedUser(username, noOfTries, timestamp) VALUES (?, ?, ?)',
+    'INSERT INTO blocked_user(username, noOfTries, timestamp) VALUES (?, ?, ?)',
     [username, nrTries, timestamp]
   );
 };
 
 exports.update = async function (id, nrOfTries) {
-  await db.query('UPDATE blockedUser SET noOfTries=?, timestamp=? WHERE id=?', [nrOfTries, new Date(), id]);
+  await db.query('UPDATE blocked_user SET noOfTries=?, timestamp=? WHERE id=?', [nrOfTries, new Date(), id]);
 };
